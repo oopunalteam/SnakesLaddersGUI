@@ -21,7 +21,6 @@ public class UISwing extends JFrame implements UI {
      */
     public UISwing() {
         initComponents();
-        this.setVisible(true);
     }
 
     /**
@@ -132,7 +131,8 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public int printMenu() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.setVisible(true);
+        return 1;
     }
 
     @Override
