@@ -8,7 +8,12 @@ package UserInterface;
 import Data.Board;
 import Data.Player;
 import Data.Square;
+import java.awt.Component;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,11 +21,14 @@ import javax.swing.JFrame;
  */
 public class UISwing extends JFrame implements UI {
 
+    private int selectedOption;
+
     /**
      * Creates new form UISwing
      */
     public UISwing() {
         initComponents();
+        this.setVisible(true);
     }
 
     /**
@@ -33,106 +41,229 @@ public class UISwing extends JFrame implements UI {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        Menu = new javax.swing.JPanel();
+        Title = new javax.swing.JLabel();
         MenuOptions = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        Setup = new javax.swing.JButton();
+        About = new javax.swing.JButton();
+        Instructions = new javax.swing.JButton();
+        Quit = new javax.swing.JButton();
+        GameSetup = new javax.swing.JPanel();
+        Title1 = new javax.swing.JLabel();
+        GameSettings = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        BoardSize = new javax.swing.JComboBox<>();
+        NumberPlayers = new javax.swing.JComboBox<>();
+        jPanel1 = new javax.swing.JPanel();
+        OK1 = new javax.swing.JButton();
+        Cancel1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new javax.swing.OverlayLayout(getContentPane()));
+
+        Menu.setLayout(new java.awt.GridBagLayout());
+
+        Title.setText("Snakes & Ladders");
+        Menu.add(Title, new java.awt.GridBagConstraints());
 
         MenuOptions.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Play");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Setup.setText("Play");
+        Setup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                SetupActionPerformed(evt);
             }
         });
-        MenuOptions.add(jButton1, new java.awt.GridBagConstraints());
+        MenuOptions.add(Setup, new java.awt.GridBagConstraints());
 
-        jButton2.setText("About");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        About.setText("About");
+        About.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                AboutActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        MenuOptions.add(jButton2, gridBagConstraints);
+        MenuOptions.add(About, gridBagConstraints);
 
-        jButton3.setText("Instrutions");
+        Instructions.setText("Instrutions");
+        Instructions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InstructionsActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        MenuOptions.add(jButton3, gridBagConstraints);
+        MenuOptions.add(Instructions, gridBagConstraints);
 
-        jButton4.setText("Quit");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        Quit.setText("Quit");
+        Quit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                QuitActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        MenuOptions.add(jButton4, gridBagConstraints);
+        MenuOptions.add(Quit, gridBagConstraints);
 
-        jLabel1.setText("Snakes & Ladders");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(203, 203, 203)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(MenuOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(219, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(59, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(49, 49, 49)
-                .addComponent(MenuOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
-        );
-
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        Menu.add(MenuOptions, gridBagConstraints);
         MenuOptions.getAccessibleContext().setAccessibleName("Menu");
+
+        getContentPane().add(Menu);
+
+        GameSetup.setLayout(new java.awt.GridBagLayout());
+
+        Title1.setText("Snakes & Ladders");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        GameSetup.add(Title1, gridBagConstraints);
+
+        GameSettings.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setText("Select the size of the board");
+        jLabel1.setToolTipText("");
+        GameSettings.add(jLabel1, new java.awt.GridBagConstraints());
+
+        jLabel2.setText("Select the number of players");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        GameSettings.add(jLabel2, gridBagConstraints);
+
+        BoardSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        BoardSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardSizeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        GameSettings.add(BoardSize, gridBagConstraints);
+
+        NumberPlayers.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        NumberPlayers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumberPlayersActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        GameSettings.add(NumberPlayers, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        GameSetup.add(GameSettings, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridLayout());
+
+        OK1.setText("OK");
+        OK1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OK1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(OK1);
+
+        Cancel1.setText("Cancel");
+        Cancel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Cancel1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Cancel1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        GameSetup.add(jPanel1, gridBagConstraints);
+
+        getContentPane().add(GameSetup);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
+        selectedOption = 4;
+    }//GEN-LAST:event_QuitActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void SetupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SetupActionPerformed
+        selectedOption = 1;
+        Menu.setVisible(false);
+        GameSetup.setVisible(true);
+    }//GEN-LAST:event_SetupActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void AboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutActionPerformed
+        Component frame = null;
+        JOptionPane.showMessageDialog(frame, "This game is a text version of Snakes & Ladders, a group proyect for OOP");
+// TODO add your handling code here:
+    }//GEN-LAST:event_AboutActionPerformed
+
+    private void BoardSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardSizeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_BoardSizeActionPerformed
+
+    private void OK1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_OK1ActionPerformed
+
+    private void NumberPlayersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumberPlayersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NumberPlayersActionPerformed
+
+    private void Cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel1ActionPerformed
+        GameSetup.setVisible(false);
+        this.printMenu();
+    }//GEN-LAST:event_Cancel1ActionPerformed
+
+    private void InstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InstructionsActionPerformed
+        Component frame = null;
+        JOptionPane.showMessageDialog(frame, "Who needs instructions for snakes and ladders?");        // TODO add your handling code here:
+    }//GEN-LAST:event_InstructionsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton About;
+    private javax.swing.JComboBox<String> BoardSize;
+    private javax.swing.JButton Cancel1;
+    private javax.swing.JPanel GameSettings;
+    private javax.swing.JPanel GameSetup;
+    private javax.swing.JButton Instructions;
+    private javax.swing.JPanel Menu;
     private javax.swing.JPanel MenuOptions;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> NumberPlayers;
+    private javax.swing.JButton OK1;
+    private javax.swing.JButton Quit;
+    private javax.swing.JButton Setup;
+    private javax.swing.JLabel Title;
+    private javax.swing.JLabel Title1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public int printMenu() {
-        this.setVisible(true);
-        return 1;
+    public void printMenu() {
+        Menu.setVisible(true);
+        selectedOption = -1;
+
+    }
+
+    @Override
+    public int menuOptions() {
+        while (selectedOption == -1) {
+            pause();
+        }
+        return selectedOption;
     }
 
     @Override
@@ -147,7 +278,13 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public int askSize() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int selectSize = 0;
+        if (BoardSize.getSelectedItem() == "Item 1") {
+            selectSize = 1;
+        } else if (BoardSize.getSelectedItem() == "Item 2") {
+            selectSize = 2;
+        }
+        return selectSize;
     }
 
     @Override
@@ -193,5 +330,13 @@ public class UISwing extends JFrame implements UI {
     @Override
     public int askMovement(Board board) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void pause() {
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(UISwing.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
