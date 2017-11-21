@@ -5,6 +5,7 @@
  */
 package UserInterface;
 
+import static Business.GamePlay.menu;
 import Data.Board;
 import Data.Player;
 import Data.Square;
@@ -12,7 +13,6 @@ import java.awt.Component;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 public class UISwing extends JFrame implements UI {
 
     private int selectedOption;
+    boolean confirm = false;
 
     /**
      * Creates new form UISwing
@@ -41,31 +42,51 @@ public class UISwing extends JFrame implements UI {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jButton4 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         Menu = new javax.swing.JPanel();
-        Title = new javax.swing.JLabel();
         MenuOptions = new javax.swing.JPanel();
         Setup = new javax.swing.JButton();
-        About = new javax.swing.JButton();
         Instructions = new javax.swing.JButton();
+        About = new javax.swing.JButton();
         Quit = new javax.swing.JButton();
         GameSetup = new javax.swing.JPanel();
-        Title1 = new javax.swing.JLabel();
-        GameSettings = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         BoardSize = new javax.swing.JComboBox<>();
         NumberPlayers = new javax.swing.JComboBox<>();
-        jPanel1 = new javax.swing.JPanel();
         OK1 = new javax.swing.JButton();
-        Cancel1 = new javax.swing.JButton();
+        PlayerSetup = new javax.swing.JPanel();
+        PlayerTokens = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        Player1Token = new javax.swing.JTextField();
+        Player2Token = new javax.swing.JTextField();
+        Player3Token = new javax.swing.JTextField();
+        Player4Token = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        OK2 = new javax.swing.JButton();
+        BoardDisplay = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TextBoard = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+
+        jButton4.setText("jButton4");
+
+        jButton6.setText("jButton6");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Snakes and Ladders");
         getContentPane().setLayout(new javax.swing.OverlayLayout(getContentPane()));
 
         Menu.setLayout(new java.awt.GridBagLayout());
-
-        Title.setText("Snakes & Ladders");
-        Menu.add(Title, new java.awt.GridBagConstraints());
 
         MenuOptions.setLayout(new java.awt.GridBagLayout());
 
@@ -77,17 +98,6 @@ public class UISwing extends JFrame implements UI {
         });
         MenuOptions.add(Setup, new java.awt.GridBagConstraints());
 
-        About.setText("About");
-        About.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AboutActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        MenuOptions.add(About, gridBagConstraints);
-
         Instructions.setText("Instrutions");
         Instructions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,8 +106,19 @@ public class UISwing extends JFrame implements UI {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         MenuOptions.add(Instructions, gridBagConstraints);
+
+        About.setText("About");
+        About.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AboutActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        MenuOptions.add(About, gridBagConstraints);
 
         Quit.setText("Quit");
         Quit.addActionListener(new java.awt.event.ActionListener() {
@@ -120,25 +141,17 @@ public class UISwing extends JFrame implements UI {
 
         GameSetup.setLayout(new java.awt.GridBagLayout());
 
-        Title1.setText("Snakes & Ladders");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        GameSetup.add(Title1, gridBagConstraints);
-
-        GameSettings.setLayout(new java.awt.GridBagLayout());
-
         jLabel1.setText("Select the size of the board");
         jLabel1.setToolTipText("");
-        GameSettings.add(jLabel1, new java.awt.GridBagConstraints());
+        GameSetup.add(jLabel1, new java.awt.GridBagConstraints());
 
         jLabel2.setText("Select the number of players");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        GameSettings.add(jLabel2, gridBagConstraints);
+        GameSetup.add(jLabel2, gridBagConstraints);
 
-        BoardSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        BoardSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "8×8", "10×10", "12×12" }));
         BoardSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardSizeActionPerformed(evt);
@@ -147,9 +160,9 @@ public class UISwing extends JFrame implements UI {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        GameSettings.add(BoardSize, gridBagConstraints);
+        GameSetup.add(BoardSize, gridBagConstraints);
 
-        NumberPlayers.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        NumberPlayers.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
         NumberPlayers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NumberPlayersActionPerformed(evt);
@@ -158,14 +171,7 @@ public class UISwing extends JFrame implements UI {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        GameSettings.add(NumberPlayers, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        GameSetup.add(GameSettings, gridBagConstraints);
-
-        jPanel1.setLayout(new java.awt.GridLayout());
+        GameSetup.add(NumberPlayers, gridBagConstraints);
 
         OK1.setText("OK");
         OK1.addActionListener(new java.awt.event.ActionListener() {
@@ -173,22 +179,153 @@ public class UISwing extends JFrame implements UI {
                 OK1ActionPerformed(evt);
             }
         });
-        jPanel1.add(OK1);
-
-        Cancel1.setText("Cancel");
-        Cancel1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Cancel1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Cancel1);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        GameSetup.add(jPanel1, gridBagConstraints);
+        gridBagConstraints.gridwidth = 2;
+        GameSetup.add(OK1, gridBagConstraints);
 
         getContentPane().add(GameSetup);
+
+        PlayerTokens.setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setText("Player 1");
+        PlayerTokens.add(jLabel3, new java.awt.GridBagConstraints());
+
+        jLabel4.setText("Player 2");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        PlayerTokens.add(jLabel4, gridBagConstraints);
+
+        jLabel5.setText("Player 3");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        PlayerTokens.add(jLabel5, gridBagConstraints);
+
+        jLabel6.setText("Player 4");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        PlayerTokens.add(jLabel6, gridBagConstraints);
+
+        Player1Token.setText("jTextField1");
+        Player1Token.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Player1TokenActionPerformed(evt);
+            }
+        });
+        PlayerTokens.add(Player1Token, new java.awt.GridBagConstraints());
+
+        Player2Token.setText("jTextField2");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        PlayerTokens.add(Player2Token, gridBagConstraints);
+
+        Player3Token.setText("jTextField3");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        PlayerTokens.add(Player3Token, gridBagConstraints);
+
+        Player4Token.setText("jTextField4");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        PlayerTokens.add(Player4Token, gridBagConstraints);
+
+        jLabel7.setText("Players, select your tokens");
+
+        OK2.setText("OK");
+        OK2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OK2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PlayerSetupLayout = new javax.swing.GroupLayout(PlayerSetup);
+        PlayerSetup.setLayout(PlayerSetupLayout);
+        PlayerSetupLayout.setHorizontalGroup(
+            PlayerSetupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PlayerSetupLayout.createSequentialGroup()
+                .addContainerGap(231, Short.MAX_VALUE)
+                .addGroup(PlayerSetupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PlayerSetupLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(212, 212, 212))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PlayerSetupLayout.createSequentialGroup()
+                        .addComponent(OK2)
+                        .addGap(258, 258, 258))))
+            .addGroup(PlayerSetupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(PlayerSetupLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(PlayerTokens, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        PlayerSetupLayout.setVerticalGroup(
+            PlayerSetupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PlayerSetupLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
+                .addComponent(OK2)
+                .addGap(33, 33, 33))
+            .addGroup(PlayerSetupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(PlayerSetupLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(PlayerTokens, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        getContentPane().add(PlayerSetup);
+
+        BoardDisplay.setLayout(new javax.swing.BoxLayout(BoardDisplay, javax.swing.BoxLayout.Y_AXIS));
+
+        TextBoard.setColumns(20);
+        TextBoard.setRows(5);
+        jScrollPane1.setViewportView(TextBoard);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(81, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(130, 130, 130))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
+        );
+
+        BoardDisplay.add(jPanel1);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1);
+
+        jButton2.setText("jButton2");
+        jPanel2.add(jButton2);
+
+        jButton3.setText("jButton3");
+        jPanel2.add(jButton3);
+
+        jButton5.setText("jButton5");
+        jPanel2.add(jButton5);
+
+        BoardDisplay.add(jPanel2);
+
+        getContentPane().add(BoardDisplay);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -204,9 +341,7 @@ public class UISwing extends JFrame implements UI {
     }//GEN-LAST:event_SetupActionPerformed
 
     private void AboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutActionPerformed
-        Component frame = null;
-        JOptionPane.showMessageDialog(frame, "This game is a text version of Snakes & Ladders, a group proyect for OOP");
-// TODO add your handling code here:
+        selectedOption = 3;
     }//GEN-LAST:event_AboutActionPerformed
 
     private void BoardSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardSizeActionPerformed
@@ -214,48 +349,81 @@ public class UISwing extends JFrame implements UI {
     }//GEN-LAST:event_BoardSizeActionPerformed
 
     private void OK1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK1ActionPerformed
-        // TODO add your handling code here:
+        //Goes to player setup
+        Menu.setVisible(false);
+        GameSetup.setVisible(false);
+        PlayerSetup.setVisible(true);
+        BoardDisplay.setVisible(false);
+        boolean confirm;
     }//GEN-LAST:event_OK1ActionPerformed
 
     private void NumberPlayersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumberPlayersActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NumberPlayersActionPerformed
 
-    private void Cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cancel1ActionPerformed
-        GameSetup.setVisible(false);
-        this.printMenu();
-    }//GEN-LAST:event_Cancel1ActionPerformed
-
     private void InstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InstructionsActionPerformed
-        Component frame = null;
-        JOptionPane.showMessageDialog(frame, "Who needs instructions for snakes and ladders?");        // TODO add your handling code here:
+        selectedOption = 2;
     }//GEN-LAST:event_InstructionsActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void Player1TokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Player1TokenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Player1TokenActionPerformed
+
+    private void OK2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK2ActionPerformed
+        //Goes to board display
+        Menu.setVisible(false);
+        GameSetup.setVisible(false);
+        BoardDisplay.setVisible(true);
+        boolean confirm;
+    }//GEN-LAST:event_OK2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton About;
+    private javax.swing.JPanel BoardDisplay;
     private javax.swing.JComboBox<String> BoardSize;
-    private javax.swing.JButton Cancel1;
-    private javax.swing.JPanel GameSettings;
     private javax.swing.JPanel GameSetup;
     private javax.swing.JButton Instructions;
     private javax.swing.JPanel Menu;
     private javax.swing.JPanel MenuOptions;
     private javax.swing.JComboBox<String> NumberPlayers;
     private javax.swing.JButton OK1;
+    private javax.swing.JButton OK2;
+    private javax.swing.JTextField Player1Token;
+    private javax.swing.JTextField Player2Token;
+    private javax.swing.JTextField Player3Token;
+    private javax.swing.JTextField Player4Token;
+    private javax.swing.JPanel PlayerSetup;
+    private javax.swing.JPanel PlayerTokens;
     private javax.swing.JButton Quit;
     private javax.swing.JButton Setup;
-    private javax.swing.JLabel Title;
-    private javax.swing.JLabel Title1;
+    private javax.swing.JTextArea TextBoard;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void printMenu() {
+        GameSetup.setVisible(false);
         Menu.setVisible(true);
         selectedOption = -1;
-
     }
 
     @Override
@@ -266,40 +434,70 @@ public class UISwing extends JFrame implements UI {
         return selectedOption;
     }
 
-    @Override
+    
     public void printInstructions() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Component frame = null;
+        JOptionPane.showMessageDialog(frame, "Who needs instructions for snakes and ladders?");
     }
 
     @Override
     public void printAbout() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Component frame = null;
+        JOptionPane.showMessageDialog(frame, "This game is a text version of Snakes & Ladders, a group proyect for OOP");
     }
 
     @Override
     public int askSize() {
         int selectSize = 0;
-        if (BoardSize.getSelectedItem() == "Item 1") {
+        if (BoardSize.getSelectedItem() == "8×8") {
             selectSize = 1;
-        } else if (BoardSize.getSelectedItem() == "Item 2") {
+        } else if (BoardSize.getSelectedItem() == "10×10") {
             selectSize = 2;
+        } else if (BoardSize.getSelectedItem() == "12×12") {
+            selectSize = 3;
         }
         return selectSize;
     }
 
     @Override
     public int askPlayerNum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        int selectNumber = 0;
+        //El casting mas innecesario de la historia
+        String s = (String) BoardSize.getSelectedItem();
+        char c = s.charAt(0);
+        int n = ((int) c )- 48;
 
+        return selectNumber;
+    }
+    
+    @Override
+    public void confirm() {
+        if (!confirm) {
+            pause();
+        } else if (confirm) {
+            return;
+        }
+    }
+    
     @Override
     public char askToken(int playerNum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String token = "p";
+        switch(playerNum) {
+            case 1:
+                token = Player1Token.getText();
+            case 2:
+                token = Player2Token.getText();
+            case 3:
+                token = Player3Token.getText();
+            case 4:
+                token = Player4Token.getText();
+        }
+        return token.charAt(0);
     }
 
     @Override
     public void printBoard(Board board) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TextBoard.setText(board.toString());
     }
 
     @Override
