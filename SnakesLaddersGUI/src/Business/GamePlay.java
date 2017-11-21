@@ -30,8 +30,8 @@ public class GamePlay {
      */
     public static void main(String[] args) {
         //selectUI(args);
-        //ui = new UIText();
-        ui = new UISwing();
+        ui = new UIText();
+        //ui = new UISwing();
         menu();
     }
 
@@ -87,8 +87,6 @@ public class GamePlay {
                 size = ui.askSize();
         }
         board = new Board(size);
-
-        //ui.confirmBoard();
     }
 
     public static void setPlayers() {
@@ -96,7 +94,7 @@ public class GamePlay {
 
         for (int i = 0; i < playerNum; i++) {
 
-            char selectToken = ui.askToken(i + 1);
+            char selectToken = ui.askToken(i);
 
             Player player = new Player(selectToken);
 
@@ -149,11 +147,8 @@ public class GamePlay {
 
                 ui.askRoll(players.get(playerTurn));
 
-                //ui.confirmRoll();
-
                 rollDice(players.get(playerTurn));
 
-                // Testing only
                 //movement(player, board);
                 arcMovement(players.get(playerTurn));
 
@@ -165,6 +160,7 @@ public class GamePlay {
                 }
             }
         } while (!win);
+        menu();
     }
 
     public static void rollDice(Player player) {
@@ -199,7 +195,7 @@ public class GamePlay {
 
     public static boolean checkWin(Player player) {
         if (player.getPosition().getIndex() >= board.getBoard().length) {
-            ui.playerWins();
+            ui.playerWins(player);
             return true;
         } else {
             return false;
