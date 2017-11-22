@@ -18,7 +18,7 @@ public class GamePlay {
     private static Random random = new Random();
 
     /*
-        public static void selectUI(String[] args) {
+    public static void selectUI(String[] args) {
         if (args.length == 0) {
             ui = new UISwing();
         } else if (args[0].equals("text")) {
@@ -28,18 +28,19 @@ public class GamePlay {
         }
     }
      */
+    
     public static void main(String[] args) {
         //selectUI(args);
-        ui = new UIText();
-        //ui = new UISwing();
+        //ui = new UIText();
+        ui = new UISwing();
         menu();
     }
 
     public static void menu() {
         do {
-            ui.printMenu();
+            int option = ui.printMenu();
 
-            switch (ui.menuOptions()) {
+            switch (option) {
                 case 1:
                     setGame();
                     break;
