@@ -97,7 +97,7 @@ public class GamePlay {
 
             char selectToken = ui.askToken(i);
 
-            Player player = new Player(selectToken);
+            Player player = new Player(selectToken,true);
 
             players.add(i, player);
 
