@@ -16,6 +16,8 @@
         </Property>
       </Properties>
     </Component>
+    <Component class="javax.swing.JOptionPane" name="winOptionPane">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>

@@ -3,10 +3,12 @@ package UserInterface;
 import Data.Board;
 import Data.Player;
 import Data.Square;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import static java.lang.Thread.sleep;
+
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -38,9 +40,6 @@ public class UISwing extends JFrame implements UI {
     private String player1StringName="";
     private String player2StringName="";
 
-    /**
-     * Creates new form UISwing
-     */
     public UISwing() {
         initComponents();
         this.setVisible(true);
@@ -62,6 +61,7 @@ public class UISwing extends JFrame implements UI {
 
         instructionsOptionPane = new javax.swing.JOptionPane();
         aboutOptionPane = new javax.swing.JOptionPane();
+        winOptionPane = new javax.swing.JOptionPane();
         MenuWindow = new javax.swing.JPanel();
         MenuOptions = new javax.swing.JPanel();
         playButton = new javax.swing.JButton();
@@ -417,6 +417,7 @@ public class UISwing extends JFrame implements UI {
     }//GEN-LAST:event_boardSizeBoxActionPerformed
 
     private void ok1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ok1ButtonActionPerformed
+
         //Goes to player setup
         this.initBoard(boardSizeBox.getSelectedIndex()+1);
         ArrayList<String> playerslist=new ArrayList<>();
@@ -441,6 +442,7 @@ public class UISwing extends JFrame implements UI {
         }
         
         this.initPlayers(playerslist);
+
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
         BoardWindow.setVisible(true);
@@ -540,16 +542,18 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JLabel separator;
     private javax.swing.JLabel separator2;
     private javax.swing.JLabel setupLabel;
+    private javax.swing.JOptionPane winOptionPane;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public int printMenu() {
-        SetupWindow.setVisible(false);
         MenuWindow.setVisible(true);
+
         BoardWindow.setVisible(false);
         selectedOption = -1;
         
         while (selectedOption == -1) {
+
             pause();
         }
         return selectedOption;
@@ -559,9 +563,11 @@ public class UISwing extends JFrame implements UI {
     public void printInstructions() {
         JOptionPane.showMessageDialog(instructionsOptionPane, bundle.getString("UISwing.InstructionsOptionPaneText"));
     }
+
     @Override
     public void printAbout() {
         JOptionPane.showMessageDialog(aboutOptionPane, bundle.getString("UISwing.aboutOptionPaneText"));    
+
     }
 
     @Override
@@ -587,7 +593,6 @@ public class UISwing extends JFrame implements UI {
                     break;
             }
         }
-
         return selectSize;
     }
 
@@ -595,11 +600,13 @@ public class UISwing extends JFrame implements UI {
     public int askNumberOfPlayers() {
         while (!confirmSetup) {
             pause();
+
         }     
+
         String numberString = (String) numberPlayersBox.getModel().getSelectedItem();
         char numberChar = numberString.charAt(0);
         int selectNumber = Character.getNumericValue(numberChar);
-        
+
         switch (selectNumber) {
             case 1:
                 player1Panel.setVisible(true);
@@ -619,6 +626,7 @@ public class UISwing extends JFrame implements UI {
         while(!confirmSetup) {
             pause();
         }
+
         char token = ' ';
         switch (playerNum) {
             case 0:
@@ -648,11 +656,13 @@ public class UISwing extends JFrame implements UI {
                 }
             }
         }
+
     }
 
     @Override
     public void askRoll(Player player) {
         boardMessages.setText(bundle.getString("UISwing.playerWord")+player+bundle.getString("UISwing.playerPrompt.text"));
+
         while (!diceRolled) {
             pause();
         }
@@ -682,6 +692,7 @@ public class UISwing extends JFrame implements UI {
         }*/
         dado=move;
         boardMessages.setText(bundle.getString("UISwing.playerWord") + player + bundle.getString("UISwing.TurnFeedbackText1") + move + bundle.getString("UISwing.TurnFeedbackText2") + String.valueOf(position.getIndex()));
+
         diceRolled = false;
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/"+String.valueOf(dado)+".png"))); // NOI18N
@@ -695,6 +706,7 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void arcFeedback(boolean good, int entry, int exit) {
+
         String feedback="";
         if (good) {
             feedback+=bundle.getString("UISwing.LadderFeedbacktext");
@@ -702,11 +714,27 @@ public class UISwing extends JFrame implements UI {
             feedback+=bundle.getString("UISwing.SnakeFeedbacktext");
         }
         boardMessages.setText(feedback+bundle.getString("UISwing.ArcFeedbackSquare1text")+entry+bundle.getString("UISwing.ArcFeedbackSquare2text")+exit);
+
     }
 
     @Override
     public void badFeedback() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void printPlayerWins(Player player) {
+        MenuWindow.setVisible(true);
+        SetupWindow.setVisible(false);
+        BoardWindow.setVisible(false);
+
+        TextBoard.setText("");
+        playerPrompt.setText("");
+        boardMessages.setText("");
+
+        JOptionPane.showMessageDialog(winOptionPane,
+                bundle.getString("UISwing.playerWord") + player + bundle.getString("UISwing.winOptionPaneText"));
     }
 
     @Override
@@ -729,6 +757,7 @@ public class UISwing extends JFrame implements UI {
             Logger.getLogger(UISwing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     
     @Override
     public void printArcs(ArrayList<Integer> doors) {
@@ -854,6 +883,4 @@ public class UISwing extends JFrame implements UI {
         }
     }
     
-    
-
 }

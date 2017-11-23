@@ -32,7 +32,9 @@ public class GamePlay {
             ui = new UISwing();
         }
         //ui = new UIText();
+
         //ui = new UISwing();
+
     }
 
     public static void menu() {
@@ -238,5 +240,6 @@ public class GamePlay {
             return false;
         }
     }
-    
+}    
+
 }
