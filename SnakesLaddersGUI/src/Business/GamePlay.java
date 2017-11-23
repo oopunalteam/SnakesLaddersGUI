@@ -8,6 +8,7 @@ import UserInterface.UISwing;
 import UserInterface.UIText;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.Random;
 
 public class GamePlay {
@@ -17,7 +18,11 @@ public class GamePlay {
     private static ArrayList<Player> players = new ArrayList<>();
     private static Random random = new Random();
 
-    /*
+    public static void main(String[] args) {
+        selectUI(args);
+        menu();
+    }
+
     public static void selectUI(String[] args) {
         if (args.length == 0) {
             ui = new UISwing();
@@ -26,20 +31,18 @@ public class GamePlay {
         } else {
             ui = new UISwing();
         }
-    }
-     */
-    
-    public static void main(String[] args) {
-        //selectUI(args);
         //ui = new UIText();
         ui = new UISwing();
-        menu();
     }
 
     public static void menu() {
+        int option;
         do {
-            int option = ui.printMenu();
-
+            try {
+                option = ui.printMenu();
+            } catch (InputMismatchException wrongInput) {
+                option = 1;
+            }
             switch (option) {
                 case 1:
                     setGame();
@@ -54,6 +57,7 @@ public class GamePlay {
                     System.exit(0);
                 default:
                     ui.badFeedback();
+                    break;
             }
         } while (true);
     }
@@ -70,9 +74,13 @@ public class GamePlay {
     }
 
     public static void setBoard() {
-        int selectSize = ui.askSize();
+        int selectSize;
+        try {
+            selectSize = ui.askBoardSize();
+        } catch (InputMismatchException wrongInput) {
+            selectSize = 1;
+        }
         int size;
-
         switch (selectSize) {
             case 1:
                 size = (int) Math.pow(8, 2);
@@ -85,29 +93,42 @@ public class GamePlay {
                 break;
             default:
                 ui.badFeedback();
-                size = ui.askSize();
+                size = ui.askBoardSize();
         }
         board = new Board(size);
     }
 
     public static void setPlayers() {
-        int playerNum = ui.askPlayerNum();
+        int playerNum;
 
+        try {
+            playerNum = ui.askNumberOfPlayers();
+        } catch (InputMismatchException wrongInput) {
+            playerNum = 1;
+        }
         for (int i = 0; i < playerNum; i++) {
 
-            char selectToken = ui.askToken(i);
+            char selectToken = ui.askPlayerToken(i);
 
-            Player player = new Player(selectToken,true);
+            //Check for repeated tokens
+            for (int j = 0; j < players.size(); j++) {
+                while (selectToken == players.get(j).getToken()) {
+                    ui.badFeedback();
+                    selectToken = ui.askPlayerToken(i);
+                }
+            }
+
+            Player player = new Player(selectToken, true);
 
             players.add(i, player);
 
-            players.get(i).setPosition(board.getBoard()[0]);
+            movePlayer(players.get(i), 0);
         }
     }
 
     public static void setArcs() {
         //create collection of random numbers
-        int numberDoors = random.nextInt(board.getSize() / 2) + 2;
+        int numberDoors = random.nextInt(board.getSize() / 3) + 2;
 
         ArrayList<Integer> doors = new ArrayList<>(numberDoors);
         for (int i = 0; i < board.getSize(); i++) {
@@ -126,36 +147,33 @@ public class GamePlay {
 
             board.getBoard()[doors.get(exit)].setArc(arc);
         }
-
-        /*Print ONLY for testing
-        for (int k = 0, l = 1; k < numberDoors; k += 2, l++) {
-            System.out.println(l + ": " + String.valueOf(doors.get(k) + 1) + ", " + String.valueOf(doors.get(k + 1) + 1));
-        }
-         */
+        //Print ONLY for testing
+        ui.printArcs(doors);         
     }
 
     //Game Play
     public static void play() {
-
         ui.printBoard(board);
 
         boolean win = false;
-
         //Round
         do {
             //Turns
             for (int playerTurn = 0; playerTurn < players.size(); playerTurn++) {
-
-                ui.askRoll(players.get(playerTurn));
-
-                rollDice(players.get(playerTurn));
+                Player player = players.get(playerTurn);
+                
+                if (player.isHuman()) {
+                    ui.askRoll(player);
+                }
+                
+                rollDice(player);
 
                 //movement(player, board);
-                arcMovement(players.get(playerTurn));
+                arcMovement(player);
 
                 ui.printBoard(board);
 
-                win = checkWin(players.get(playerTurn));
+                win = checkWin(player);
                 if (win) {
                     break;
                 }
@@ -164,42 +182,59 @@ public class GamePlay {
         menu();
     }
 
+    public static void movePlayer(Player player, int moveSquare) {
+        try {
+            //Erase previous position
+            player.getPosition().getPlayers().remove(player);
+            player.setPosition(board.getBoard()[moveSquare]);
+        }
+        catch (NullPointerException FirstMove) {
+            player.setPosition(board.getBoard()[moveSquare]);
+        }catch (ArrayIndexOutOfBoundsException winningMove) {
+            player.setPosition(board.getBoard()[board.getBoard().length - 1]);
+        }
+    }
+
     public static void rollDice(Player player) {
 
         int move = random.nextInt(5) + 1;
 
-        try {
-            player.setPosition(board.getBoard()[player.getPosition().getIndex() + move - 1]);
+        movePlayer(player, move + player.getPosition().getIndex() - 1);
 
-        } catch (ArrayIndexOutOfBoundsException winningMove) {
-            player.setPosition(board.getBoard()[board.getBoard().length - 1]);
-        }
         ui.turnFeedback(move, player, player.getPosition());
+
     }
 
     public static void arcMovement(Player player) {
+        
         if (player.getPosition().getArc() != null) {
 
             int entry = player.getPosition().getIndex();
             int exit = player.getPosition().getArc().getExit().getIndex();
 
             //Feedback
+            boolean ladder = true;
             if (entry < exit) {
-                ui.arcFeedback(true, entry, exit);
+                ladder = true;
             } else if (entry > exit) {
-                ui.arcFeedback(false, entry, exit);
+                ladder = false;
             }
-            //set new position
-            player.setPosition(player.getPosition().getArc().getExit());
+            ui.arcFeedback(ladder, entry, exit);
+
+            //Set new position
+            movePlayer(player, exit - 1);
         }
+        
     }
 
     public static boolean checkWin(Player player) {
+        
         if (player.getPosition().getIndex() >= board.getBoard().length) {
-            ui.playerWins(player);
+            ui.printPlayerWins(player);
             return true;
         } else {
             return false;
         }
     }
+    
 }

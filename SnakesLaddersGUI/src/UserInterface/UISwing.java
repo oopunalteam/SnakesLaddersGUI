@@ -1,20 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UserInterface;
 
-import static Business.GamePlay.menu;
 import Data.Board;
 import Data.Player;
 import Data.Square;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -23,14 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
-/**
- *
- * @author sergioalejandro
- */
 public class UISwing extends JFrame implements UI {
 
+    ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle");
     private int selectedOption;
-    boolean confirmBoard = false;
+    boolean confirmSetup = false;
     boolean confirmedPlayers = false;
     boolean diceRolled = false;
     
@@ -43,6 +34,9 @@ public class UISwing extends JFrame implements UI {
     private int height=0;
     private int width=0;
     private int dado=1;
+    
+    private String player1StringName="";
+    private String player2StringName="";
 
     /**
      * Creates new form UISwing
@@ -52,7 +46,6 @@ public class UISwing extends JFrame implements UI {
         this.setVisible(true);
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
-        PlayerSetup.setVisible(false);
         BoardWindow.setVisible(false);
     }
 
@@ -203,6 +196,11 @@ public class UISwing extends JFrame implements UI {
                 numberPlayersBoxActionPerformed(evt);
             }
         });
+        numberPlayersBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                numberPlayersBoxPropertyChange(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -226,7 +224,9 @@ public class UISwing extends JFrame implements UI {
         player1Label.setText(bundle.getString("UISwing.player1Label.text")); // NOI18N
         player1Panel.add(player1Label);
 
+        player1Text.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         player1Text.setText(bundle.getString("UISwing.player1Text.text")); // NOI18N
+        player1Text.setPreferredSize(new java.awt.Dimension(150, 22));
         player1Text.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 player1TextActionPerformed(evt);
@@ -242,9 +242,13 @@ public class UISwing extends JFrame implements UI {
         player2Panel.setLayout(new javax.swing.BoxLayout(player2Panel, javax.swing.BoxLayout.LINE_AXIS));
 
         player2Label.setText(bundle.getString("UISwing.player2Label.text")); // NOI18N
+        player2Label.setEnabled(false);
         player2Panel.add(player2Label);
 
+        player2Text.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         player2Text.setText(bundle.getString("UISwing.player2Text.text")); // NOI18N
+        player2Text.setEnabled(false);
+        player2Text.setPreferredSize(new java.awt.Dimension(150, 22));
         player2Text.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 player2TextActionPerformed(evt);
@@ -253,8 +257,8 @@ public class UISwing extends JFrame implements UI {
         player2Panel.add(player2Text);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         PlayerSetup.add(player2Panel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -308,7 +312,6 @@ public class UISwing extends JFrame implements UI {
         dice1Button.setBorder(null);
         dice1Button.setBorderPainted(false);
         dice1Button.setContentAreaFilled(false);
-        dice1Button.setOpaque(false);
         dice1Button.setPreferredSize(new java.awt.Dimension(120, 120));
         dice1Button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -333,7 +336,6 @@ public class UISwing extends JFrame implements UI {
 
         player1Picture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/J1.png"))); // NOI18N
         player1Picture.setText(bundle.getString("UISwing.player1Picture.text")); // NOI18N
-        player1Picture.setPreferredSize(new java.awt.Dimension(50, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -342,14 +344,13 @@ public class UISwing extends JFrame implements UI {
 
         player2Picture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/J2.png"))); // NOI18N
         player2Picture.setText(bundle.getString("UISwing.player2Picture.text")); // NOI18N
-        player2Picture.setPreferredSize(new java.awt.Dimension(50, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridheight = 2;
         rightColumn.add(player2Picture, gridBagConstraints);
 
-        player1Name.setText(bundle.getString("UISwing.player1Name.text")); // NOI18N
+        player1Name.setText(player1StringName);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -361,7 +362,7 @@ public class UISwing extends JFrame implements UI {
         gridBagConstraints.gridy = 1;
         rightColumn.add(player1Status, gridBagConstraints);
 
-        player2Name.setText(bundle.getString("UISwing.player2Name.text")); // NOI18N
+        player2Name.setText(player2StringName);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -399,9 +400,10 @@ public class UISwing extends JFrame implements UI {
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        selectedOption = 1;
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(true);
+        BoardWindow.setVisible(false);
+        selectedOption = 1;
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void aboutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutButtonActionPerformed
@@ -414,22 +416,47 @@ public class UISwing extends JFrame implements UI {
 
     private void ok1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ok1ButtonActionPerformed
         //Goes to player setup
-        this.initBoard(3);
+        this.initBoard(boardSizeBox.getSelectedIndex()+1);
         ArrayList<String> playerslist=new ArrayList<>();
         playerslist.add("Player1");
         playerslist.add("1");
+        player1StringName=player1Text.getText();
+        player1Name.setText(player1StringName);
+
+        
+        if(numberPlayersBox.getSelectedIndex()==0) {
+            player2StringName="-";
+            player2Name.setText(player2StringName);
+            player2Picture.setEnabled(false);
+            player2Name.setEnabled(false);
+            player2Status.setEnabled(false);
+        }
+        else {
         playerslist.add("Player2");
         playerslist.add("2");
+        player2StringName=player2Text.getText();
+        player2Name.setText(player2StringName);
+        }
+        
         this.initPlayers(playerslist);
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
-        //PlayerSetup.setVisible(true);
         BoardWindow.setVisible(true);
-        confirmBoard = true;
+        confirmSetup = true;
     }//GEN-LAST:event_ok1ButtonActionPerformed
 
     private void numberPlayersBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberPlayersBoxActionPerformed
-        // TODO add your handling code here:
+        int i=numberPlayersBox.getSelectedIndex();
+        switch(i) {
+            case 0:
+                player2Label.setEnabled(false);
+                player2Text.setEnabled(false);
+                break;
+            case 1:
+                player2Label.setEnabled(true);
+                player2Text.setEnabled(true);
+                break;   
+        }
     }//GEN-LAST:event_numberPlayersBoxActionPerformed
 
     private void instructionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionsButtonActionPerformed
@@ -466,6 +493,10 @@ public class UISwing extends JFrame implements UI {
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/"+String.valueOf(dado)+".png"))); // NOI18N
     }//GEN-LAST:event_dice1ButtonMouseExited
+
+    private void numberPlayersBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_numberPlayersBoxPropertyChange
+      // TODO add your handling code here:
+    }//GEN-LAST:event_numberPlayersBoxPropertyChange
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BoardWindow;
@@ -513,6 +544,7 @@ public class UISwing extends JFrame implements UI {
     public int printMenu() {
         SetupWindow.setVisible(false);
         MenuWindow.setVisible(true);
+        BoardWindow.setVisible(false);
         selectedOption = -1;
         
         while (selectedOption == -1) {
@@ -523,19 +555,17 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void printInstructions() {
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle");
         JOptionPane.showMessageDialog(instructionsOptionPane, bundle.getString("UISwing.InstructionsOptionPaneText"));
     }
     @Override
     public void printAbout() {
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle");
         JOptionPane.showMessageDialog(aboutOptionPane, bundle.getString("UISwing.aboutOptionPaneText"));    
     }
 
     @Override
-    public int askSize() {
+    public int askBoardSize() {
         int selectSize = 0;
-        while (!confirmBoard) {
+        while (!confirmSetup) {
             pause();
         }
         String sizeString = (String) boardSizeBox.getModel().getSelectedItem();
@@ -560,11 +590,11 @@ public class UISwing extends JFrame implements UI {
     }
 
     @Override
-    public int askPlayerNum() {
-        while (!confirmBoard) {
+    public int askNumberOfPlayers() {
+        while (!confirmSetup) {
             pause();
         }     
-        String numberString = (String) boardSizeBox.getModel().getSelectedItem();
+        String numberString = (String) numberPlayersBox.getModel().getSelectedItem();
         char numberChar = numberString.charAt(0);
         int selectNumber = Character.getNumericValue(numberChar);
         
@@ -583,87 +613,78 @@ public class UISwing extends JFrame implements UI {
     }
 
     @Override
-    public char askToken(int playerNum) {
-        
-        char token = 'a';
+    public char askPlayerToken(int playerNum) {
+        while(!confirmSetup) {
+            pause();
+        }
+        char token = ' ';
         switch (playerNum) {
             case 0:
                 token = 'a';
+                break;
             case 1:
                 token = 'b';
+                break;
         }
         return token;
     }
 
     @Override
     public void printBoard(Board board) {
-        //TextBoard.setText(board.toString());
-        if(arcUI!=null){
-            for(int i=0; i<arcUI.size();i++) {
-                Tablero.remove(arcUI.get(i));
+            if(arcUI==null) {
+                // Initilize Arcs
+                arcUI = new ArrayList<>();
+                Square[] squareBoard=board.getBoard();
+                for(int i=0;i<squareBoard.length;i++) {
+                    Square square=squareBoard[i];
+                    if(square.getArc()!=null) {
+                        JLabel newJLabel1 = new javax.swing.JLabel();
+                        newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
+                        newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
+                        newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
+                        String image=null;
+                        if(square.getArc().toString().contains("L")) {
+                            image="ladder";
+                        }
+                        else {
+                            image="snake";
+                        }
+
+                        if(square.getArc().getExit().equals(square)) {
+                            image+="_f.png";
+                        }
+                        else {
+                            image+="_i.png";
+                        }
+
+                        newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/"+image)));
+                        newJLabel1.setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))+1),50,50);
+                        Tablero.add(newJLabel1);
+                        Tablero.setComponentZOrder(newJLabel1, 0);
+
+                        arcUI.add(newJLabel1);
+                    }
+                }
             }
-        }
-        
-        arcUI = new ArrayList<>();
-        Square[] squareBoard=board.getBoard();
+        Square[] squareBoard=board.getBoard();    
         for(int i=0;i<squareBoard.length;i++) {
             Square square=squareBoard[i];
-            if(square.getPlayer()!=null) {
-                int token=(int)square.getPlayer().getToken();
-                token=1;
-                players.get(token).setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))),50,50);
-                Tablero.setComponentZOrder(players.get(token), 0);
+            if(square.getPlayers()!=null && square.getPlayers().size()>0) {
+                for(int x=0; x<square.getPlayers().size();x++) {
+                    int token=0;
+                    if(square.getPlayers().get(x).getToken()=='b') {
+                        token=1;
+                    }
+                    players.get(token).setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))+1),50,50);
+                    Tablero.setComponentZOrder(players.get(token), 0);
+                }
             }
-            
-            if(square.getArc()!=null) {
-                JLabel newJLabel1 = new javax.swing.JLabel();
-                newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
-                newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
-                newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
-                String image=null;
-                if(square.getArc().toString().contains("L")) {
-                    image="ladder";
-                }
-                else {
-                    image="snake";
-                }
-                
-                if(square.getArc().getExit().equals(square)) {
-                    image+="_f.png";
-                }
-                else {
-                    image+="_i.png";
-                }
-                    
-                newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/"+image)));
-                newJLabel1.setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))),50,50);
-                Tablero.add(newJLabel1);
-                Tablero.setComponentZOrder(newJLabel1, 0);
-
-                arcUI.add(newJLabel1);
-            }
-            Tablero.setComponentZOrder(boardUI.get(i), Tablero.getComponentCount()-1);
         }
     }
 
     @Override
-    public void playerWins(Player player) {
-        MenuWindow.setVisible(true);
-        SetupWindow.setVisible(false);
-        PlayerSetup.setVisible(false);
-        BoardWindow.setVisible(false);
-        
-        //TextBoard.setText("");
-        boardMessages.setText("");
-
-        Component frame = null;
-        JOptionPane.showMessageDialog(frame, "Player " + player + " you win!");
-
-        }
-
-    @Override
     public void askRoll(Player player) {
-        boardMessages.setText("Player " + player + ", roll dice?");
+        boardMessages.setText(bundle.getString("UISwing.playerWord")+player+bundle.getString("UISwing.playerPrompt.text"));
         while (!diceRolled) {
             pause();
         }
@@ -692,7 +713,7 @@ public class UISwing extends JFrame implements UI {
                 break;
         }*/
         dado=move;
-        boardMessages.setText("player " + player + ", you rolled a " + move + ". You're now at square " + String.valueOf(position.getIndex()));
+        boardMessages.setText(bundle.getString("UISwing.playerWord") + player + bundle.getString("UISwing.TurnFeedbackText1") + move + bundle.getString("UISwing.TurnFeedbackText2") + String.valueOf(position.getIndex()));
         diceRolled = false;
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/"+String.valueOf(dado)+".png"))); // NOI18N
@@ -706,11 +727,13 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void arcFeedback(boolean good, int entry, int exit) {
+        String feedback="";
         if (good) {
-            boardMessages.setText("You climbed a ladder! You moved from square " + entry + " to square " + exit);
+            feedback+=bundle.getString("UISwing.LadderFeedbacktext");
         } else if (!good) {
-            boardMessages.setText("A snake attacked you! You moved from square " + entry + " to square " + exit);
+            feedback+=bundle.getString("UISwing.SnakeFeedbacktext");
         }
+        boardMessages.setText(feedback+bundle.getString("UISwing.ArcFeedbackSquare1text")+entry+bundle.getString("UISwing.ArcFeedbackSquare2text")+exit);
     }
 
     @Override
@@ -718,12 +741,29 @@ public class UISwing extends JFrame implements UI {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void printPlayerWins(Player player) {
+        MenuWindow.setVisible(true);
+        SetupWindow.setVisible(false);
+        PlayerSetup.setVisible(false);
+        BoardWindow.setVisible(false);
+        
+        boardMessages.setText("");
+
+        JOptionPane.showMessageDialog(this,bundle.getString("UISwing.playerWord") + player + bundle.getString("UISwing.winOptionPaneText"));
+
+        }
+    
     private void pause() {
         try {
             Thread.sleep(50);
         } catch (InterruptedException ex) {
             Logger.getLogger(UISwing.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @Override
+    public void printArcs(ArrayList<Integer> doors) {
     }
     
     private void initBoard(int size) {

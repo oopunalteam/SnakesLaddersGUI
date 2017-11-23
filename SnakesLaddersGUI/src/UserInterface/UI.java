@@ -1,37 +1,36 @@
 package UserInterface;
+
 import Data.Board;
 import Data.Player;
 import Data.Square;
+import java.util.ArrayList;
 
 public interface UI {
 
-	//Setting the game
-	int printMenu();
-        
-	void printInstructions();
+    //Setting the game
+    int printMenu();
 
-	void printAbout();
+    void printInstructions();
 
-	int askSize();
+    void printAbout();
 
-	int askPlayerNum();
+    int askBoardSize();
 
-	char askToken(int playerNum);
+    int askNumberOfPlayers();
 
+    char askPlayerToken(int playerNum);
+    
+    void printArcs(ArrayList<Integer> doors);
 
-	//Printing the game
-	void printBoard(Board board);
+    void printBoard(Board board);
 
-	void playerWins(Player player);
+    void askRoll(Player player);
+    
+    void turnFeedback(int move, Player player, Square position);
 
+    void arcFeedback(boolean good, int entry, int exit);
+    
+    void printPlayerWins(Player player);
 
-	//Request input
-	void askRoll(Player player);
-        
-	//Feedback
-	void turnFeedback(int move, Player player, Square position);
-
-	void arcFeedback(boolean good, int entry, int exit);
-
-	void badFeedback();
+    void badFeedback();
 }

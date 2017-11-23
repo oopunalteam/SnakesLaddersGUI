@@ -19,17 +19,13 @@ public class Player {
         return human;
     }
 
-    public void setHuman(boolean human) {
-        this.human = human;
-    }
-
     public Square getPosition() {
         return position;
     }
 
     public void setPosition(Square position) {
         this.position = position;
-        this.position.setPlayer(this);
+        this.position.setPlayers(this);
     }
 
     @Override
