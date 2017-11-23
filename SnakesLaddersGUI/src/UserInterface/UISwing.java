@@ -9,11 +9,17 @@ import static Business.GamePlay.menu;
 import Data.Board;
 import Data.Player;
 import Data.Square;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -25,6 +31,11 @@ public class UISwing extends JFrame implements UI {
     boolean confirmBoard = false;
     boolean confirmedPlayers = false;
     boolean diceRolled = false;
+    
+    private ArrayList<JLabel> players=null;
+    
+    private ArrayList<JLabel> boardUI=null;
+    private ArrayList<Integer> boardColor=null;
 
     /**
      * Creates new form UISwing
@@ -82,6 +93,7 @@ public class UISwing extends JFrame implements UI {
         dice1Button = new javax.swing.JButton();
         boardMessages = new javax.swing.JLabel();
         playerPrompt = new javax.swing.JLabel();
+        Tablero = new javax.swing.JPanel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle"); // NOI18N
         instructionsOptionPane.setToolTipText(bundle.getString("UISwing.instructionsOptionPane.toolTipText")); // NOI18N
@@ -300,6 +312,11 @@ public class UISwing extends JFrame implements UI {
 
         getContentPane().add(BoardWindow);
 
+        Tablero.setMinimumSize(Tablero.getPreferredSize());
+        Tablero.setOpaque(false);
+        Tablero.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().add(Tablero);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -323,9 +340,17 @@ public class UISwing extends JFrame implements UI {
 
     private void ok1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ok1ButtonActionPerformed
         //Goes to player setup
+        this.initBoard(3);
+        ArrayList<String> playerslist=new ArrayList<>();
+        playerslist.add("Player1");
+        playerslist.add("1");
+        playerslist.add("Player2");
+        playerslist.add("2");
+        this.initPlayers(playerslist);
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
-        PlayerSetup.setVisible(true);
+        //PlayerSetup.setVisible(true);
+        Tablero.setVisible(true);
         BoardWindow.setVisible(false);
         confirmBoard = true;
     }//GEN-LAST:event_ok1ButtonActionPerformed
@@ -359,6 +384,7 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JLabel PlayerInstructions;
     private javax.swing.JPanel PlayerSetup;
     private javax.swing.JPanel SetupWindow;
+    private javax.swing.JPanel Tablero;
     private javax.swing.JTextArea TextBoard;
     private javax.swing.JButton aboutButton;
     private javax.swing.JOptionPane aboutOptionPane;
@@ -476,6 +502,10 @@ public class UISwing extends JFrame implements UI {
     @Override
     public void printBoard(Board board) {
         TextBoard.setText(board.toString());
+        
+        for(int i=0;i<board.getSize();i++) {
+            
+        }
     }
 
     @Override
@@ -549,4 +579,84 @@ public class UISwing extends JFrame implements UI {
             Logger.getLogger(UISwing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void initBoard(int size) {
+        boardUI=new ArrayList<>();
+        boardColor=new ArrayList<>();
+        int length=0;
+        switch(size) {
+            case 1:
+                length=8;
+                break;
+            case 2:
+                length=10;
+                break;
+            case 3:
+                length=12;
+                break;
+        }
+        Tablero.setLayout(null);
+        Tablero.setSize(length*50,length*50);
+        Tablero.setPreferredSize(Tablero.getSize());
+        Tablero.setMaximumSize(Tablero.getSize());
+        Tablero.setMinimumSize(Tablero.getSize());
+        this.setSize(length*50,length*50);
+        for(int i=0; i<length;i++){
+                for(int j=0; j<length;j++){
+                    JLabel newJLabel1 = new javax.swing.JLabel();
+                    newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
+                    newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
+                    newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
+                    Tablero.add(newJLabel1);
+                    newJLabel1.setBounds((length*50)-(j+1)*50, (length*50)-(i+1)*50, 50, 50);
+                    newJLabel1.setVerticalTextPosition(SwingConstants.CENTER);
+                    newJLabel1.setHorizontalTextPosition(SwingConstants.CENTER);
+                    boolean flag=true;
+                    int random=0;
+                    while(flag) {
+                        boolean test=true;
+                        random = 1+(int)(Math.random()*4);
+                        if(j>0 && boardColor.get(i*length+j-1)==random)
+                            test=false;
+                        
+                        if(i>0 && boardColor.get((i-1)*length+j)==random)
+                            test=false;
+                        
+                        if(test)
+                            flag=false;
+                    }
+                    
+                    newJLabel1.setIcon(new ImageIcon("back"+String.valueOf(random)+".jpg"));
+                    newJLabel1.setText(String.valueOf(j+i*length+1));
+                    if(random==1) {
+                        newJLabel1.setForeground(Color.BLACK);
+                    }
+                    else {
+                        newJLabel1.setForeground(Color.WHITE);
+                    }
+                    newJLabel1.setFont(new Font(newJLabel1.getFont().getName(), Font.BOLD, 20));
+                    boardUI.add(newJLabel1);
+                    boardColor.add(random);
+                }
+        }
+    }
+    
+    private void initPlayers(ArrayList<String> playersList) {
+        players=new ArrayList<>();
+        for(int i=0; i<playersList.size()/2; i++) {
+            JLabel newJLabel1 = new javax.swing.JLabel();
+            newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
+            newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
+            newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
+            newJLabel1.setIcon(new ImageIcon("J"+playersList.get(2*i+1)+".png"));
+            newJLabel1.setBounds(Tablero.getWidth()-50, Tablero.getHeight()-50,50,50);
+            Tablero.add(newJLabel1);
+            Tablero.setComponentZOrder(newJLabel1, 0);
+
+            players.add(newJLabel1);
+        }
+    }
+    
+    
+
 }
