@@ -26,4 +26,6 @@ public class Arc {
     public String toString() {
         return image;
     }
+
 }
+

@@ -48,4 +48,6 @@ public class Square {
         }
         return image;
     }
+
 }
+
