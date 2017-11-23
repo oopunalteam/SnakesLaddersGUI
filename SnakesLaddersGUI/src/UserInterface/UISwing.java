@@ -295,7 +295,7 @@ public class UISwing extends JFrame implements UI {
         rightColumn.setMinimumSize(new java.awt.Dimension(250, 500));
         rightColumn.setPreferredSize(new java.awt.Dimension(250, 500));
 
-        dice1Button.setIcon(new javax.swing.ImageIcon("1.png"));
+        dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/1.png")));
         dice1Button.setBorder(null);
         dice1Button.setBorderPainted(false);
         dice1Button.setContentAreaFilled(false);
@@ -370,7 +370,7 @@ public class UISwing extends JFrame implements UI {
     private void dice1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dice1ButtonActionPerformed
         diceRolled = true;
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        dice1Button.setIcon(new javax.swing.ImageIcon(String.valueOf(dado)+".png")); // NOI18N
+        dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/"+String.valueOf(dado)+".png"))); // NOI18N
     }//GEN-LAST:event_dice1ButtonActionPerformed
 
     private void player1TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_player1TextActionPerformed
@@ -384,7 +384,7 @@ public class UISwing extends JFrame implements UI {
     private void dice1ButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dice1ButtonMouseEntered
         if(!diceRolled){
             this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            dice1Button.setIcon(new javax.swing.ImageIcon("file.gif")); // NOI18N
+            dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/file.gif"))); // NOI18N
         }
     }//GEN-LAST:event_dice1ButtonMouseEntered
 
@@ -395,7 +395,7 @@ public class UISwing extends JFrame implements UI {
 
     private void dice1ButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dice1ButtonMouseExited
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        dice1Button.setIcon(new javax.swing.ImageIcon(String.valueOf(dado)+".png")); // NOI18N
+        dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/"+String.valueOf(dado)+".png"))); // NOI18N
     }//GEN-LAST:event_dice1ButtonMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -558,7 +558,7 @@ public class UISwing extends JFrame implements UI {
                     image+="_i.png";
                 }
                     
-                newJLabel1.setIcon(new ImageIcon(image));
+                newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/"+image)));
                 newJLabel1.setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))),50,50);
                 Tablero.add(newJLabel1);
                 Tablero.setComponentZOrder(newJLabel1, 0);
@@ -618,7 +618,7 @@ public class UISwing extends JFrame implements UI {
         boardMessages.setText("player " + player + ", you rolled a " + move + ". You're now at square " + String.valueOf(position.getIndex()));
         diceRolled = false;
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        dice1Button.setIcon(new javax.swing.ImageIcon(String.valueOf(dado)+".png")); // NOI18N
+        dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/"+String.valueOf(dado)+".png"))); // NOI18N
         try {
             sleep(2000);
         }
@@ -700,7 +700,7 @@ public class UISwing extends JFrame implements UI {
                             flag=false;
                     }
                     
-                    newJLabel1.setIcon(new ImageIcon("back"+String.valueOf(random)+".jpg"));
+                    newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/back"+String.valueOf(random)+".jpg")));
                     newJLabel1.setText(String.valueOf(j+i*length+1));
                     if(random==1) {
                         newJLabel1.setForeground(Color.BLACK);
@@ -722,7 +722,7 @@ public class UISwing extends JFrame implements UI {
             newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
             newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
             newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
-            newJLabel1.setIcon(new ImageIcon("J"+playersList.get(2*i+1)+".png"));
+            newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/J"+playersList.get(2*i+1)+".png")));
             newJLabel1.setBounds(this.width-50, this.height-50,50,50);
             Tablero.add(newJLabel1);
             Tablero.setComponentZOrder(newJLabel1, 0);
