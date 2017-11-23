@@ -153,12 +153,8 @@ public class GamePlay {
 
             board.getBoard()[doors.get(exit)].setArc(arc);
         }
-
         //Print ONLY for testing
-        for (int k = 0, l = 1; k < numberDoors; k += 2, l++) {
-            System.out.println(l + ": " + String.valueOf(doors.get(k) + 1) + ", " + String.valueOf(doors.get(k + 1) + 1));
-        }
-         
+        ui.printArcs(doors);         
     }
 
     //Game Play
