@@ -8,41 +8,42 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UIText implements UI {
+
     private Scanner input = new Scanner(System.in);
 
     //Game menu
     @Override
     public int printMenu() {
-        System.out.println("\tSnakes & Ladders"+"\n1. Play"+"\n2. Instructions"+"\n3. About"+"\n4. Quit");
+        System.out.println("\tSnakes & Ladders" + "\n1. Play" + "\n2. Instructions" + "\n3. About" + "\n4. Quit");
         return input.nextInt();
     }
 
     @Override
     public void printInstructions() {
-        System.out.println("\tInstructions"+"\nWrite something to roll the dice\n");
+        System.out.println("\tInstructions" + "\nWrite something to roll the dice\n");
     }
 
     @Override
     public void printAbout() {
-        System.out.println("\tAbout"+"\nThis game is a text version of Snakes & Ladders, a group project for OOP");
+        System.out.println("\tAbout" + "\nThis game is a text version of Snakes & Ladders, a group project for OOP");
     }
 
     //Game setup
     @Override
-    public int askSize() {
-        System.out.println("\tDifficulty:" + "\n1. 8x8" + "\n2. 10x10" + "\n3. 12x12");
+    public int askBoardSize() {
+        System.out.println("\tBoard size:" + "\n1. 8x8" + "\n2. 10x10" + "\n3. 12x12");
         return input.nextInt();
     }
 
-        @Override
-    public int askPlayerNum() {
+    @Override
+    public int askNumberOfPlayers() {
         System.out.println("How many players are going to play?");
         return input.nextInt();
     }
-    
+
     @Override
-    public char askToken(int playerNum) {
-        System.out.println("Player " + playerNum + ". please select your token:");
+    public char askPlayerToken(int playerNum) {
+        System.out.println("Player " + (playerNum + 1) + ". please select your token:");
 
         char token = input.next().charAt(0);
 
@@ -50,7 +51,7 @@ public class UIText implements UI {
             System.out.println("You selected the token: " + token + "\n");
         } else {
             this.badFeedback();
-            token = this.askToken(playerNum);
+            token = this.askPlayerToken(playerNum);
         }
         return token;
     }
@@ -59,11 +60,6 @@ public class UIText implements UI {
     @Override
     public void printBoard(Board board) {
         System.out.println(board);
-    }
-
-    @Override
-    public void playerWins(Player player) {
-        System.out.println("Player " + player + " you win!");
     }
 
     //Request input
@@ -101,12 +97,18 @@ public class UIText implements UI {
 
     @Override
     public void arcFeedback(boolean good, int entry, int exit) {
+        String feedback = "";
         if (good) {
-            System.out.println("You climbed a ladder! You moved from square " + entry + " to square " + exit);
+            feedback = "You climbed a ladder!";
         } else if (!good) {
-            System.out.println("A snake attacked you! You moved from square " + entry + " to square " + exit);
+            feedback = "A snake attacked you!";
         }
+        System.out.println(feedback + " You moved from square " + entry + " to square " + exit);
+    }
 
+    @Override
+    public void printPlayerWins(Player player) {
+        System.out.println("Player " + player + " you win!");
     }
 
     @Override
@@ -124,5 +126,4 @@ public class UIText implements UI {
         }
         return move;
     }
-
 }

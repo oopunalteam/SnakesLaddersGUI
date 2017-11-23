@@ -1,40 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UserInterface;
 
-import static Business.GamePlay.menu;
 import Data.Board;
 import Data.Player;
 import Data.Square;
-import java.awt.Component;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author sergioalejandro
- */
 public class UISwing extends JFrame implements UI {
 
+    ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle");
     private int selectedOption;
-    boolean confirmBoard = false;
+    boolean confirmSetup = false;
     boolean confirmedPlayers = false;
     boolean diceRolled = false;
 
-    /**
-     * Creates new form UISwing
-     */
     public UISwing() {
         initComponents();
         this.setVisible(true);
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
-        PlayerSetup.setVisible(false);
         BoardWindow.setVisible(false);
     }
 
@@ -50,6 +37,7 @@ public class UISwing extends JFrame implements UI {
 
         instructionsOptionPane = new javax.swing.JOptionPane();
         aboutOptionPane = new javax.swing.JOptionPane();
+        winOptionPane = new javax.swing.JOptionPane();
         MenuWindow = new javax.swing.JPanel();
         MenuOptions = new javax.swing.JPanel();
         playButton = new javax.swing.JButton();
@@ -308,9 +296,10 @@ public class UISwing extends JFrame implements UI {
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        selectedOption = 1;
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(true);
+        BoardWindow.setVisible(false);
+        selectedOption = 1;
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void aboutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutButtonActionPerformed
@@ -322,12 +311,11 @@ public class UISwing extends JFrame implements UI {
     }//GEN-LAST:event_boardSizeBoxActionPerformed
 
     private void ok1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ok1ButtonActionPerformed
-        //Goes to player setup
+        //Goes to boardWindow
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
-        PlayerSetup.setVisible(true);
-        BoardWindow.setVisible(false);
-        confirmBoard = true;
+        BoardWindow.setVisible(true);
+        confirmSetup = true;
     }//GEN-LAST:event_ok1ButtonActionPerformed
 
     private void numberPlayersBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberPlayersBoxActionPerformed
@@ -385,15 +373,18 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JLabel playerPrompt;
     private javax.swing.JButton quitButton;
     private javax.swing.JLabel setupLabel;
+    private javax.swing.JOptionPane winOptionPane;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public int printMenu() {
-        SetupWindow.setVisible(false);
         MenuWindow.setVisible(true);
-        selectedOption = -1;
-        
-        while (selectedOption == -1) {
+        SetupWindow.setVisible(false);
+        BoardWindow.setVisible(false);
+
+        selectedOption = - 1;
+        //wait for a button action
+        while (selectedOption == - 1) {
             pause();
         }
         return selectedOption;
@@ -401,19 +392,18 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void printInstructions() {
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle");
         JOptionPane.showMessageDialog(instructionsOptionPane, bundle.getString("UISwing.InstructionsOptionPaneText"));
-    }
-    @Override
-    public void printAbout() {
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle");
-        JOptionPane.showMessageDialog(aboutOptionPane, bundle.getString("UISwing.aboutOptionPaneText"));    
     }
 
     @Override
-    public int askSize() {
+    public void printAbout() {
+        JOptionPane.showMessageDialog(aboutOptionPane, bundle.getString("UISwing.aboutOptionPaneText"));
+    }
+
+    @Override
+    public int askBoardSize() {
         int selectSize = 0;
-        while (!confirmBoard) {
+        while (!confirmSetup) {
             pause();
         }
         String sizeString = (String) boardSizeBox.getModel().getSelectedItem();
@@ -433,19 +423,18 @@ public class UISwing extends JFrame implements UI {
                     break;
             }
         }
-
         return selectSize;
     }
 
     @Override
-    public int askPlayerNum() {
-        while (!confirmBoard) {
+    public int askNumberOfPlayers() {
+        while (!confirmSetup) {
             pause();
-        }     
-        String numberString = (String) boardSizeBox.getModel().getSelectedItem();
+        }
+        String numberString = (String) numberPlayersBox.getModel().getSelectedItem();
         char numberChar = numberString.charAt(0);
         int selectNumber = Character.getNumericValue(numberChar);
-        
+
         switch (selectNumber) {
             case 1:
                 player1Panel.setVisible(true);
@@ -461,14 +450,19 @@ public class UISwing extends JFrame implements UI {
     }
 
     @Override
-    public char askToken(int playerNum) {
-        
-        char token = 'a';
+    public char askPlayerToken(int playerNum) {
+        while (!confirmSetup) {
+            pause();
+        }
+        //Update for GUI
+        char token = ' ';
         switch (playerNum) {
             case 0:
                 token = 'a';
+                break;
             case 1:
                 token = 'b';
+                break;
         }
         return token;
     }
@@ -479,24 +473,12 @@ public class UISwing extends JFrame implements UI {
     }
 
     @Override
-    public void playerWins(Player player) {
-        MenuWindow.setVisible(true);
-        SetupWindow.setVisible(false);
-        PlayerSetup.setVisible(false);
-        BoardWindow.setVisible(false);
-        
-        TextBoard.setText("");
-        playerPrompt.setText("");
-        boardMessages.setText("");
-
-        Component frame = null;
-        JOptionPane.showMessageDialog(frame, "Player " + player + " you win!");
-
-        }
-
-    @Override
     public void askRoll(Player player) {
-        playerPrompt.setText("Player " + player + ", roll dice?");
+        playerPrompt.setText(
+                bundle.getString("UISwing.playerWord")
+                + player
+                + bundle.getString("UISwing.playerPrompt.text"));
+
         while (!diceRolled) {
             pause();
         }
@@ -524,22 +506,53 @@ public class UISwing extends JFrame implements UI {
                 System.out.print("WOW");
                 break;
         }
-        boardMessages.setText("player " + player + ", you rolled a " + move + ". You're now at square " + String.valueOf(position.getIndex()));
+        boardMessages.setText(
+                bundle.getString("UISwing.playerWord")
+                + player
+                + bundle.getString("UISwing.TurnFeedbackText1")
+                + move
+                + bundle.getString("UISwing.TurnFeedbackText2")
+                + String.valueOf(position.getIndex())
+        );
+
         diceRolled = false;
     }
 
     @Override
     public void arcFeedback(boolean good, int entry, int exit) {
+        String feedback = "";
         if (good) {
-            boardMessages.setText("You climbed a ladder! You moved from square " + entry + " to square " + exit);
+            feedback = bundle.getString("UISwing.LadderFeedbacktext");
         } else if (!good) {
-            boardMessages.setText("A snake attacked you! You moved from square " + entry + " to square " + exit);
+            feedback = bundle.getString("UISwing.SnakeFeedbacktext");
         }
+        boardMessages.setText(
+                feedback
+                + bundle.getString("UISwing.ArcFeedbackSquare1text")
+                + entry
+                + bundle.getString("UISwing.ArcFeedbackSquare2text")
+                + exit
+        );
     }
 
     @Override
     public void badFeedback() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void printPlayerWins(Player player) {
+        MenuWindow.setVisible(true);
+        SetupWindow.setVisible(false);
+        BoardWindow.setVisible(false);
+
+        TextBoard.setText("");
+        playerPrompt.setText("");
+        boardMessages.setText("");
+
+        JOptionPane.showMessageDialog(winOptionPane,
+                bundle.getString("UISwing.playerWord") + player + bundle.getString("UISwing.winOptionPaneText"));
     }
 
     private void pause() {

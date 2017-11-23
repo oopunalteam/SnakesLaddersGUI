@@ -2,24 +2,38 @@ package Data;
 
 public class Player {
 
-	private char token;
-	private Square position;
+    private final char token;
+    private boolean human;
+    private Square position;
 
-	public Player(char token) {
-		this.token = token;
-	}
+    public Player(char token, boolean human) {
+        this.token = token;
+        this.human = human;
+    }
 
-	public Square getPosition() {
-		return position;
-	}
+    public char getToken() {
+        return token;
+    }
 
-	public void setPosition(Square position) {
-		this.position = position;
-		position.setImage(this + position.getImage());
-	}
+    public boolean isHuman() {
+        return human;
+    }
 
-	@Override
-	public String toString() {
-		return String.valueOf(this.token);
-	}
+    public void setHuman(boolean human) {
+        this.human = human;
+    }
+
+    public Square getPosition() {
+        return position;
+    }
+
+    public void setPosition(Square position) {
+        this.position = position;
+        this.position.setPlayer(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.token);
+    }
 }
