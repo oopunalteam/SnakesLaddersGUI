@@ -8,6 +8,7 @@ import UserInterface.UISwing;
 import UserInterface.UIText;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.Random;
 
 public class GamePlay {
@@ -32,14 +33,18 @@ public class GamePlay {
             ui = new UISwing();
         }
          */
-        //ui = new UIText();
-        ui = new UISwing();
+        ui = new UIText();
+        //ui = new UISwing();
     }
 
     public static void menu() {
+        int option;
         do {
-            int option = ui.printMenu();
-
+            try {
+                option = ui.printMenu();
+            } catch (InputMismatchException wrongInput) {
+                option = 1;
+            }
             switch (option) {
                 case 1:
                     setGame();
@@ -54,6 +59,7 @@ public class GamePlay {
                     System.exit(0);
                 default:
                     ui.badFeedback();
+                    break;
             }
         } while (true);
     }
@@ -70,9 +76,13 @@ public class GamePlay {
     }
 
     public static void setBoard() {
-        int selectSize = ui.askBoardSize();
+        int selectSize;
+        try {
+            selectSize = ui.askBoardSize();
+        } catch (InputMismatchException wrongInput) {
+            selectSize = 1;
+        }
         int size;
-
         switch (selectSize) {
             case 1:
                 size = (int) Math.pow(8, 2);
@@ -91,19 +101,35 @@ public class GamePlay {
     }
 
     public static void setPlayers() {
-        int playerNum = ui.askNumberOfPlayers();
+        int playerNum;
 
+        try {
+            playerNum = ui.askNumberOfPlayers();
+        } catch (InputMismatchException wrongInput) {
+            playerNum = 1;
+        }
         for (int i = 0; i < playerNum; i++) {
 
             char selectToken = ui.askPlayerToken(i);
+
+            //Check for repeated tokens
+            for (int j = 0; j < players.size(); j++) {
+                while (selectToken == players.get(j).getToken()) {
+                    ui.badFeedback();
+                    selectToken = ui.askPlayerToken(i);
+                }
+            }
 
             Player player = new Player(selectToken, true);
 
             players.add(i, player);
 
             movePlayer(players.get(i), 0);
-            players.get(i).setPosition(board.getBoard()[0]);
         }
+    }
+
+    public static void setToken() {
+
     }
 
     public static void setArcs() {
@@ -128,11 +154,11 @@ public class GamePlay {
             board.getBoard()[doors.get(exit)].setArc(arc);
         }
 
-        /*Print ONLY for testing
+        //Print ONLY for testing
         for (int k = 0, l = 1; k < numberDoors; k += 2, l++) {
             System.out.println(l + ": " + String.valueOf(doors.get(k) + 1) + ", " + String.valueOf(doors.get(k + 1) + 1));
         }
-         */
+         
     }
 
     //Game Play
@@ -166,13 +192,12 @@ public class GamePlay {
     public static void movePlayer(Player player, int moveSquare) {
         try {
             //Erase previous position
-            player.getPosition().setPlayer(null);
+            player.getPosition().getPlayers().remove(player);
             player.setPosition(board.getBoard()[moveSquare]);
         }
         catch (NullPointerException FirstMove) {
             player.setPosition(board.getBoard()[moveSquare]);
-        }
-        catch (ArrayIndexOutOfBoundsException winningMove) {
+        }catch (ArrayIndexOutOfBoundsException winningMove) {
             player.setPosition(board.getBoard()[board.getBoard().length - 1]);
         }
     }
@@ -188,6 +213,7 @@ public class GamePlay {
     }
 
     public static void arcMovement(Player player) {
+        
         if (player.getPosition().getArc() != null) {
 
             int entry = player.getPosition().getIndex();
@@ -203,11 +229,13 @@ public class GamePlay {
             ui.arcFeedback(ladder, entry, exit);
 
             //Set new position
-            movePlayer(player, exit);
+            movePlayer(player, exit - 1);
         }
+        
     }
 
     public static boolean checkWin(Player player) {
+        
         if (player.getPosition().getIndex() >= board.getBoard().length) {
             ui.printPlayerWins(player);
             return true;
@@ -215,4 +243,5 @@ public class GamePlay {
             return false;
         }
     }
+    
 }
