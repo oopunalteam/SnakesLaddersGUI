@@ -29,7 +29,7 @@ public class Player {
 
     public void setPosition(Square position) {
         this.position = position;
-        this.position.setPlayer(this);
+        this.position.setPlayers(this);
     }
 
     @Override

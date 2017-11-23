@@ -3,6 +3,7 @@ package UserInterface;
 import Data.Board;
 import Data.Player;
 import Data.Square;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -562,4 +563,11 @@ public class UISwing extends JFrame implements UI {
             Logger.getLogger(UISwing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public void printArcs(ArrayList<Integer> doors) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

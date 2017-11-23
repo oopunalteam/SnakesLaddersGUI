@@ -3,6 +3,7 @@ package UserInterface;
 import Data.Board;
 import Data.Player;
 import Data.Square;
+import java.util.ArrayList;
 
 public interface UI {
 
@@ -18,6 +19,8 @@ public interface UI {
     int askNumberOfPlayers();
 
     char askPlayerToken(int playerNum);
+    
+    void printArcs(ArrayList<Integer> doors);
 
     void printBoard(Board board);
 
