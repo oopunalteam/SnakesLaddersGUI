@@ -2,42 +2,46 @@ package Data;
 
 public class Square {
 
-	private int index;
-	private String image;
-	private Arc arc;
+    private final int index;
+    private Player player;
+    private Arc arc;
 
-	public Square(int index) {
-		this.index = index;
-		this.image = Integer.toString(index);
-	}
+    public Square(int index) {
+        this.index = index;
+    }
 
-	public int getIndex() {
-		return index;
-	}
+    public int getIndex() {
+        return index;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public String getImage() {
-		return image;
-	}
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
-	public Arc getArc() {
-		return arc;
-	}
+    public Arc getArc() {
+        return arc;
+    }
 
-	public void setArc(Arc arc) {
-		this.arc = arc;
-		//this.image = this.image + arc;
-	}
+    public void setArc(Arc arc) {
+        this.arc = arc;
+    }
 
-	@Override
-	public String toString() {
-		if(arc != null) {
-			return image + arc;
-		} else {
-			return image;
-		}
-	}
+    @Override
+    public String toString() {
+        String image = String.valueOf(index);
+        if (arc == null && player == null) {
+            image = String.valueOf(index);
+        } else if (arc == null && player != null) {
+            image = player.toString() + String.valueOf(index);
+        } else if (arc != null && player == null) {
+            image = arc.toString() + String.valueOf(index);
+        } else if (arc != null && player != null) {
+            image = player.toString() + arc.toString() + String.valueOf(index);
+        }
+        return image;
+    }
 }

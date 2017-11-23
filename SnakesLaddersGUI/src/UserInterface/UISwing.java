@@ -97,6 +97,14 @@ public class UISwing extends JFrame implements UI {
         Tablero = new javax.swing.JPanel();
         rightColumn = new javax.swing.JPanel();
         dice1Button = new javax.swing.JButton();
+        player1Picture = new javax.swing.JLabel();
+        player2Picture = new javax.swing.JLabel();
+        player1Name = new javax.swing.JLabel();
+        player1Status = new javax.swing.JLabel();
+        player2Name = new javax.swing.JLabel();
+        player2Status = new javax.swing.JLabel();
+        separator = new javax.swing.JLabel();
+        separator2 = new javax.swing.JLabel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle"); // NOI18N
         instructionsOptionPane.setToolTipText(bundle.getString("UISwing.instructionsOptionPane.toolTipText")); // NOI18N
@@ -294,12 +302,14 @@ public class UISwing extends JFrame implements UI {
 
         rightColumn.setMinimumSize(new java.awt.Dimension(250, 500));
         rightColumn.setPreferredSize(new java.awt.Dimension(250, 500));
+        rightColumn.setLayout(new java.awt.GridBagLayout());
 
         dice1Button.setIcon(new javax.swing.ImageIcon(UISwing.class.getResource("../Resources/1.png")));
         dice1Button.setBorder(null);
         dice1Button.setBorderPainted(false);
         dice1Button.setContentAreaFilled(false);
         dice1Button.setOpaque(false);
+        dice1Button.setPreferredSize(new java.awt.Dimension(120, 120));
         dice1Button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 dice1ButtonMouseEntered(evt);
@@ -316,7 +326,66 @@ public class UISwing extends JFrame implements UI {
                 dice1ButtonActionPerformed(evt);
             }
         });
-        rightColumn.add(dice1Button);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        rightColumn.add(dice1Button, gridBagConstraints);
+
+        player1Picture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/J1.png"))); // NOI18N
+        player1Picture.setText(bundle.getString("UISwing.player1Picture.text")); // NOI18N
+        player1Picture.setPreferredSize(new java.awt.Dimension(50, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        rightColumn.add(player1Picture, gridBagConstraints);
+
+        player2Picture.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/J2.png"))); // NOI18N
+        player2Picture.setText(bundle.getString("UISwing.player2Picture.text")); // NOI18N
+        player2Picture.setPreferredSize(new java.awt.Dimension(50, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridheight = 2;
+        rightColumn.add(player2Picture, gridBagConstraints);
+
+        player1Name.setText(bundle.getString("UISwing.player1Name.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        rightColumn.add(player1Name, gridBagConstraints);
+
+        player1Status.setText(bundle.getString("UISwing.player1Status.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        rightColumn.add(player1Status, gridBagConstraints);
+
+        player2Name.setText(bundle.getString("UISwing.player2Name.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        rightColumn.add(player2Name, gridBagConstraints);
+
+        player2Status.setText(bundle.getString("UISwing.player2Status.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        rightColumn.add(player2Status, gridBagConstraints);
+
+        separator.setText(bundle.getString("UISwing.separator.text")); // NOI18N
+        separator.setPreferredSize(new java.awt.Dimension(0, 25));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        rightColumn.add(separator, gridBagConstraints);
+
+        separator2.setText(bundle.getString("UISwing.separator2.text")); // NOI18N
+        separator2.setPreferredSize(new java.awt.Dimension(0, 100));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        rightColumn.add(separator2, gridBagConstraints);
 
         BoardWindow.add(rightColumn, new java.awt.GridBagConstraints());
 
@@ -421,14 +490,22 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JButton ok1Button;
     private javax.swing.JButton playButton;
     private javax.swing.JLabel player1Label;
+    private javax.swing.JLabel player1Name;
     private javax.swing.JPanel player1Panel;
+    private javax.swing.JLabel player1Picture;
+    private javax.swing.JLabel player1Status;
     private javax.swing.JTextField player1Text;
     private javax.swing.JLabel player2Label;
+    private javax.swing.JLabel player2Name;
     private javax.swing.JPanel player2Panel;
+    private javax.swing.JLabel player2Picture;
+    private javax.swing.JLabel player2Status;
     private javax.swing.JTextField player2Text;
     private javax.swing.JLabel playerNumberLabel;
     private javax.swing.JButton quitButton;
     private javax.swing.JPanel rightColumn;
+    private javax.swing.JLabel separator;
+    private javax.swing.JLabel separator2;
     private javax.swing.JLabel setupLabel;
     // End of variables declaration//GEN-END:variables
 
