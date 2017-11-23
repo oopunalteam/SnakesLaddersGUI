@@ -32,7 +32,7 @@ public class GamePlay {
             ui = new UISwing();
         }
         //ui = new UIText();
-        ui = new UISwing();
+        //ui = new UISwing();
     }
 
     public static void menu() {
@@ -138,17 +138,19 @@ public class GamePlay {
 
         //Create the arcs that connect squares
         int entry, exit;
+        ArrayList<Integer> arcsList = new ArrayList<>();
         for (int j = 0, l = 1; j < numberDoors; j += 2, l++) {
             entry = j;
             exit = j + 1;
             Arc arc = new Arc(l, board, doors.get(entry), doors.get(exit));
 
             board.getBoard()[doors.get(entry)].setArc(arc);
-
+            arcsList.add(doors.get(entry));
             board.getBoard()[doors.get(exit)].setArc(arc);
+            arcsList.add(doors.get(exit));
         }
         //Print ONLY for testing
-        ui.printArcs(doors);         
+        ui.printArcs(arcsList);         
     }
 
     //Game Play

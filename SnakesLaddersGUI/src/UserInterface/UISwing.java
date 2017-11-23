@@ -44,6 +44,7 @@ public class UISwing extends JFrame implements UI {
     public UISwing() {
         initComponents();
         this.setVisible(true);
+        this.setLocationRelativeTo(null);
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
         BoardWindow.setVisible(false);
@@ -160,6 +161,7 @@ public class UISwing extends JFrame implements UI {
         MenuWindow.add(MenuOptions, gridBagConstraints);
         MenuOptions.getAccessibleContext().setAccessibleName(bundle.getString("UISwing.MenuOptions.AccessibleContext.accessibleName")); // NOI18N
 
+        nameLabel.setFont(new java.awt.Font("Castellar", 0, 24)); // NOI18N
         nameLabel.setText(bundle.getString("UISwing.nameLabel.text")); // NOI18N
         MenuWindow.add(nameLabel, new java.awt.GridBagConstraints());
 
@@ -631,41 +633,7 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void printBoard(Board board) {
-            if(arcUI==null) {
-                // Initilize Arcs
-                arcUI = new ArrayList<>();
-                Square[] squareBoard=board.getBoard();
-                for(int i=0;i<squareBoard.length;i++) {
-                    Square square=squareBoard[i];
-                    if(square.getArc()!=null) {
-                        JLabel newJLabel1 = new javax.swing.JLabel();
-                        newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
-                        newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
-                        newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
-                        String image=null;
-                        if(square.getArc().toString().contains("L")) {
-                            image="ladder";
-                        }
-                        else {
-                            image="snake";
-                        }
 
-                        if(square.getArc().getExit().equals(square)) {
-                            image+="_f.png";
-                        }
-                        else {
-                            image+="_i.png";
-                        }
-
-                        newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/"+image)));
-                        newJLabel1.setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))+1),50,50);
-                        Tablero.add(newJLabel1);
-                        Tablero.setComponentZOrder(newJLabel1, 0);
-
-                        arcUI.add(newJLabel1);
-                    }
-                }
-            }
         Square[] squareBoard=board.getBoard();    
         for(int i=0;i<squareBoard.length;i++) {
             Square square=squareBoard[i];
@@ -764,6 +732,43 @@ public class UISwing extends JFrame implements UI {
     
     @Override
     public void printArcs(ArrayList<Integer> doors) {
+             // Initilize Arcs
+        arcUI = new ArrayList<>();
+        for(int q=0;q<doors.size();q=q+2) {
+            int init=doors.get(q);
+            int end=doors.get(q+1);
+                //System.out.println(String.valueOf(init)+" - "+String.valueOf(end));
+                JLabel newJLabel1 = new javax.swing.JLabel();
+                newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
+                newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
+                newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
+                
+                JLabel newJLabel2 = new javax.swing.JLabel();
+                newJLabel2.setMaximumSize(new java.awt.Dimension(50, 50));
+                newJLabel2.setMinimumSize(new java.awt.Dimension(50, 50));
+                newJLabel2.setPreferredSize(new java.awt.Dimension(50, 50));
+                
+                String image=null;
+                if(end>init) {
+                    image="ladder";
+                }
+                else {
+                    image="snake";
+                }
+
+                newJLabel1.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/"+image+"_i.png")));
+                newJLabel1.setBounds(this.width-50*(((init)%(int)(width/50))+1), this.height-50*((int)((init)/(int)(width/50))+1),50,50);
+                
+                newJLabel2.setIcon(new ImageIcon(UISwing.class.getResource("../Resources/"+image+"_f.png")));
+                newJLabel2.setBounds(this.width-50*(((end)%(int)(width/50))+1), this.height-50*((int)((end)/(int)(width/50))+1),50,50);
+                Tablero.add(newJLabel1);
+                Tablero.setComponentZOrder(newJLabel1, 0);
+                Tablero.add(newJLabel2);
+                Tablero.setComponentZOrder(newJLabel2, 0);
+
+                arcUI.add(newJLabel1);
+                arcUI.add(newJLabel2);
+        }
     }
     
     private void initBoard(int size) {
@@ -789,7 +794,7 @@ public class UISwing extends JFrame implements UI {
         this.height = length*50;
         this.width = length*50;
         
-        this.setSize(this.width+300,this.height+100);
+        this.setSize(this.width+300,this.height+200);
         this.setResizable(false);
         
         for(int i=0; i<length;i++){
@@ -826,6 +831,7 @@ public class UISwing extends JFrame implements UI {
                         newJLabel1.setForeground(Color.WHITE);
                     }
                     newJLabel1.setFont(new Font(newJLabel1.getFont().getName(), Font.BOLD, 20));
+                    Tablero.setComponentZOrder(newJLabel1, Tablero.getComponentCount()-1);
                     boardUI.add(newJLabel1);
                     boardColor.add(random);
                 }
