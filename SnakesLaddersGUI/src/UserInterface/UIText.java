@@ -123,15 +123,4 @@ public class UIText implements UI {
     public void badFeedback() {
         System.out.println("Select a valid option\n");
     }
-
-    //Testing only
-    public int askMovement(Board board) {
-        System.out.println("Select the square that you want to move to");
-        int move = input.nextInt();
-        if (move < 0 || move > board.getSize()) {
-            badFeedback();
-            askMovement(board);
-        }
-        return move;
-    }
 }

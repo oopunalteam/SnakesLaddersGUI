@@ -19,10 +19,6 @@ public class Player {
         return human;
     }
 
-    public void setHuman(boolean human) {
-        this.human = human;
-    }
-
     public Square getPosition() {
         return position;
     }

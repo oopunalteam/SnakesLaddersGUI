@@ -24,7 +24,6 @@ public class GamePlay {
     }
 
     public static void selectUI(String[] args) {
-        /*
         if (args.length == 0) {
             ui = new UISwing();
         } else if (args[0].equals("text")) {
@@ -32,9 +31,8 @@ public class GamePlay {
         } else {
             ui = new UISwing();
         }
-         */
-        ui = new UIText();
-        //ui = new UISwing();
+        //ui = new UIText();
+        ui = new UISwing();
     }
 
     public static void menu() {
@@ -128,10 +126,6 @@ public class GamePlay {
         }
     }
 
-    public static void setToken() {
-
-    }
-
     public static void setArcs() {
         //create collection of random numbers
         int numberDoors = random.nextInt(board.getSize() / 3) + 2;
@@ -166,17 +160,20 @@ public class GamePlay {
         do {
             //Turns
             for (int playerTurn = 0; playerTurn < players.size(); playerTurn++) {
-
-                ui.askRoll(players.get(playerTurn));
-
-                rollDice(players.get(playerTurn));
+                Player player = players.get(playerTurn);
+                
+                if (player.isHuman()) {
+                    ui.askRoll(player);
+                }
+                
+                rollDice(player);
 
                 //movement(player, board);
-                arcMovement(players.get(playerTurn));
+                arcMovement(player);
 
                 ui.printBoard(board);
 
-                win = checkWin(players.get(playerTurn));
+                win = checkWin(player);
                 if (win) {
                     break;
                 }

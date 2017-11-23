@@ -6,8 +6,8 @@ public class Square {
 
     private final int index;
     private ArrayList<Player> players;
-    private Player player;
     private Arc arc;
+    String image;
 
     public Square(int index) {
         this.index = index;
@@ -36,7 +36,7 @@ public class Square {
 
     @Override
     public String toString() {
-        String image = String.valueOf(index);
+        image = String.valueOf(index);
         if (arc == null && players.isEmpty()) {
             image = String.valueOf(index);
         } else if (arc == null && !players.isEmpty()) {
