@@ -727,20 +727,6 @@ public class UISwing extends JFrame implements UI {
     public void printPlayerWins(Player player) {
         MenuWindow.setVisible(true);
         SetupWindow.setVisible(false);
-        BoardWindow.setVisible(false);
-
-        TextBoard.setText("");
-        playerPrompt.setText("");
-        boardMessages.setText("");
-
-        JOptionPane.showMessageDialog(winOptionPane,
-                bundle.getString("UISwing.playerWord") + player + bundle.getString("UISwing.winOptionPaneText"));
-    }
-
-    @Override
-    public void printPlayerWins(Player player) {
-        MenuWindow.setVisible(true);
-        SetupWindow.setVisible(false);
         PlayerSetup.setVisible(false);
         BoardWindow.setVisible(false);
         

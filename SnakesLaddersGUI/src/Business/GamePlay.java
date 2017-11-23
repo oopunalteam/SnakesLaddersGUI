@@ -241,5 +241,3 @@ public class GamePlay {
         }
     }
 }    
-
-}
