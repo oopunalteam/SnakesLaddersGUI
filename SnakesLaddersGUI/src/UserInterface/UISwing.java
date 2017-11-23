@@ -11,7 +11,9 @@ import Data.Player;
 import Data.Square;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +38,11 @@ public class UISwing extends JFrame implements UI {
     
     private ArrayList<JLabel> boardUI=null;
     private ArrayList<Integer> boardColor=null;
+    private ArrayList<JLabel> arcUI=null;
+    
+    private int height=0;
+    private int width=0;
+    private int dado=1;
 
     /**
      * Creates new form UISwing
@@ -86,14 +93,10 @@ public class UISwing extends JFrame implements UI {
         ok1Button = new javax.swing.JButton();
         FillerPanel = new javax.swing.JPanel();
         BoardWindow = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TextBoard = new javax.swing.JTextArea();
-        jPanel2 = new javax.swing.JPanel();
-        dice1Button = new javax.swing.JButton();
         boardMessages = new javax.swing.JLabel();
-        playerPrompt = new javax.swing.JLabel();
         Tablero = new javax.swing.JPanel();
+        rightColumn = new javax.swing.JPanel();
+        dice1Button = new javax.swing.JButton();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("UserInterface/Bundle"); // NOI18N
         instructionsOptionPane.setToolTipText(bundle.getString("UISwing.instructionsOptionPane.toolTipText")); // NOI18N
@@ -271,51 +274,53 @@ public class UISwing extends JFrame implements UI {
 
         getContentPane().add(SetupWindow);
 
-        BoardWindow.setLayout(new java.awt.BorderLayout());
-
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
-
-        TextBoard.setColumns(20);
-        TextBoard.setRows(5);
-        jScrollPane1.setViewportView(TextBoard);
-
-        jPanel1.add(jScrollPane1);
-
-        BoardWindow.add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-
-        dice1Button.setText(bundle.getString("UISwing.dice1Button.text")); // NOI18N
-        dice1Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dice1ButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        jPanel2.add(dice1Button, gridBagConstraints);
+        BoardWindow.setLayout(new java.awt.GridBagLayout());
 
         boardMessages.setText(bundle.getString("UISwing.boardMessages.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        jPanel2.add(boardMessages, gridBagConstraints);
-
-        playerPrompt.setText(bundle.getString("UISwing.playerPrompt.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        jPanel2.add(playerPrompt, gridBagConstraints);
-
-        BoardWindow.add(jPanel2, java.awt.BorderLayout.PAGE_START);
-
-        getContentPane().add(BoardWindow);
+        BoardWindow.add(boardMessages, gridBagConstraints);
 
         Tablero.setMinimumSize(Tablero.getPreferredSize());
+        Tablero.setName(""); // NOI18N
         Tablero.setOpaque(false);
+        Tablero.setPreferredSize(new java.awt.Dimension(200, 200));
         Tablero.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(Tablero);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        BoardWindow.add(Tablero, gridBagConstraints);
+
+        rightColumn.setMinimumSize(new java.awt.Dimension(250, 500));
+        rightColumn.setPreferredSize(new java.awt.Dimension(250, 500));
+
+        dice1Button.setIcon(new javax.swing.ImageIcon("1.png"));
+        dice1Button.setBorder(null);
+        dice1Button.setBorderPainted(false);
+        dice1Button.setContentAreaFilled(false);
+        dice1Button.setOpaque(false);
+        dice1Button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                dice1ButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                dice1ButtonMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                dice1ButtonMouseReleased(evt);
+            }
+        });
+        dice1Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dice1ButtonActionPerformed(evt);
+            }
+        });
+        rightColumn.add(dice1Button);
+
+        BoardWindow.add(rightColumn, new java.awt.GridBagConstraints());
+
+        getContentPane().add(BoardWindow);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -350,8 +355,7 @@ public class UISwing extends JFrame implements UI {
         MenuWindow.setVisible(false);
         SetupWindow.setVisible(false);
         //PlayerSetup.setVisible(true);
-        Tablero.setVisible(true);
-        BoardWindow.setVisible(false);
+        BoardWindow.setVisible(true);
         confirmBoard = true;
     }//GEN-LAST:event_ok1ButtonActionPerformed
 
@@ -365,6 +369,8 @@ public class UISwing extends JFrame implements UI {
 
     private void dice1ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dice1ButtonActionPerformed
         diceRolled = true;
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        dice1Button.setIcon(new javax.swing.ImageIcon(String.valueOf(dado)+".png")); // NOI18N
     }//GEN-LAST:event_dice1ButtonActionPerformed
 
     private void player1TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_player1TextActionPerformed
@@ -374,6 +380,23 @@ public class UISwing extends JFrame implements UI {
     private void player2TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_player2TextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_player2TextActionPerformed
+
+    private void dice1ButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dice1ButtonMouseEntered
+        if(!diceRolled){
+            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            dice1Button.setIcon(new javax.swing.ImageIcon("file.gif")); // NOI18N
+        }
+    }//GEN-LAST:event_dice1ButtonMouseEntered
+
+    private void dice1ButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dice1ButtonMouseReleased
+
+
+    }//GEN-LAST:event_dice1ButtonMouseReleased
+
+    private void dice1ButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dice1ButtonMouseExited
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        dice1Button.setIcon(new javax.swing.ImageIcon(String.valueOf(dado)+".png")); // NOI18N
+    }//GEN-LAST:event_dice1ButtonMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BoardWindow;
@@ -385,7 +408,6 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JPanel PlayerSetup;
     private javax.swing.JPanel SetupWindow;
     private javax.swing.JPanel Tablero;
-    private javax.swing.JTextArea TextBoard;
     private javax.swing.JButton aboutButton;
     private javax.swing.JOptionPane aboutOptionPane;
     private javax.swing.JLabel boardMessages;
@@ -394,9 +416,6 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JButton dice1Button;
     private javax.swing.JButton instructionsButton;
     private javax.swing.JOptionPane instructionsOptionPane;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JComboBox<String> numberPlayersBox;
     private javax.swing.JButton ok1Button;
@@ -408,8 +427,8 @@ public class UISwing extends JFrame implements UI {
     private javax.swing.JPanel player2Panel;
     private javax.swing.JTextField player2Text;
     private javax.swing.JLabel playerNumberLabel;
-    private javax.swing.JLabel playerPrompt;
     private javax.swing.JButton quitButton;
+    private javax.swing.JPanel rightColumn;
     private javax.swing.JLabel setupLabel;
     // End of variables declaration//GEN-END:variables
 
@@ -501,10 +520,52 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void printBoard(Board board) {
-        TextBoard.setText(board.toString());
+        //TextBoard.setText(board.toString());
+        if(arcUI!=null){
+            for(int i=0; i<arcUI.size();i++) {
+                Tablero.remove(arcUI.get(i));
+            }
+        }
         
-        for(int i=0;i<board.getSize();i++) {
+        arcUI = new ArrayList<>();
+        Square[] squareBoard=board.getBoard();
+        for(int i=0;i<squareBoard.length;i++) {
+            Square square=squareBoard[i];
+            if(square.getPlayer()!=null) {
+                int token=(int)square.getPlayer().getToken();
+                token=1;
+                players.get(token).setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))),50,50);
+                Tablero.setComponentZOrder(players.get(token), 0);
+            }
             
+            if(square.getArc()!=null) {
+                JLabel newJLabel1 = new javax.swing.JLabel();
+                newJLabel1.setMaximumSize(new java.awt.Dimension(50, 50));
+                newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
+                newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
+                String image=null;
+                if(square.getArc().toString().contains("L")) {
+                    image="ladder";
+                }
+                else {
+                    image="snake";
+                }
+                
+                if(square.getArc().getExit().equals(square)) {
+                    image+="_f.png";
+                }
+                else {
+                    image+="_i.png";
+                }
+                    
+                newJLabel1.setIcon(new ImageIcon(image));
+                newJLabel1.setBounds(this.width-50*((i%(int)Math.sqrt(squareBoard.length))+1), this.height-50*((int)(i/(int)Math.sqrt(squareBoard.length))),50,50);
+                Tablero.add(newJLabel1);
+                Tablero.setComponentZOrder(newJLabel1, 0);
+
+                arcUI.add(newJLabel1);
+            }
+            Tablero.setComponentZOrder(boardUI.get(i), Tablero.getComponentCount()-1);
         }
     }
 
@@ -515,8 +576,7 @@ public class UISwing extends JFrame implements UI {
         PlayerSetup.setVisible(false);
         BoardWindow.setVisible(false);
         
-        TextBoard.setText("");
-        playerPrompt.setText("");
+        //TextBoard.setText("");
         boardMessages.setText("");
 
         Component frame = null;
@@ -526,7 +586,7 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void askRoll(Player player) {
-        playerPrompt.setText("Player " + player + ", roll dice?");
+        boardMessages.setText("Player " + player + ", roll dice?");
         while (!diceRolled) {
             pause();
         }
@@ -534,7 +594,7 @@ public class UISwing extends JFrame implements UI {
 
     @Override
     public void turnFeedback(int move, Player player, Square position) {
-        switch (move) {
+/*        switch (move) {
             case 1:
                 System.out.print("Bummer");
                 break;
@@ -553,9 +613,18 @@ public class UISwing extends JFrame implements UI {
             case 6:
                 System.out.print("WOW");
                 break;
-        }
+        }*/
+        dado=move;
         boardMessages.setText("player " + player + ", you rolled a " + move + ". You're now at square " + String.valueOf(position.getIndex()));
         diceRolled = false;
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        dice1Button.setIcon(new javax.swing.ImageIcon(String.valueOf(dado)+".png")); // NOI18N
+        try {
+            sleep(2000);
+        }
+        catch(Exception e) {
+            
+        }
     }
 
     @Override
@@ -600,7 +669,12 @@ public class UISwing extends JFrame implements UI {
         Tablero.setPreferredSize(Tablero.getSize());
         Tablero.setMaximumSize(Tablero.getSize());
         Tablero.setMinimumSize(Tablero.getSize());
-        this.setSize(length*50,length*50);
+        this.height = length*50;
+        this.width = length*50;
+        
+        this.setSize(this.width+300,this.height+100);
+        this.setResizable(false);
+        
         for(int i=0; i<length;i++){
                 for(int j=0; j<length;j++){
                     JLabel newJLabel1 = new javax.swing.JLabel();
@@ -649,7 +723,7 @@ public class UISwing extends JFrame implements UI {
             newJLabel1.setMinimumSize(new java.awt.Dimension(50, 50));
             newJLabel1.setPreferredSize(new java.awt.Dimension(50, 50));
             newJLabel1.setIcon(new ImageIcon("J"+playersList.get(2*i+1)+".png"));
-            newJLabel1.setBounds(Tablero.getWidth()-50, Tablero.getHeight()-50,50,50);
+            newJLabel1.setBounds(this.width-50, this.height-50,50,50);
             Tablero.add(newJLabel1);
             Tablero.setComponentZOrder(newJLabel1, 0);
 
